@@ -1,0 +1,17 @@
+[
+  {
+    "name": "shalu",
+    "message": "I am checking the notification thing",
+    "sentTo": "Pankaj"
+  },
+  {
+    "name": "sakshi",
+    "message": "I am checking the notification thing for the second time",
+    "sentTo": "rahul"
+  },
+  {
+    "name": "mahesh",
+    "message": "I am checking the notification thing for third time",
+    "sentTo": "bharti"
+  }
+]
