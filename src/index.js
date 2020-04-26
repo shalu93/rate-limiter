@@ -1,18 +1,17 @@
 import bodyParser from 'body-parser';
-import express, { Router } from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import jsend from 'jsend';
 import { logger } from './helpers';
 import config from './config';
 import { errorHandler } from './middlewares';
-import { notificationsRouter } from './api/notifications';
-import { customRedisRateLimiter, rateLimiterUsingThirdParty } from './middlewares';
+import { notificationsRouter, notificationsPerSecRouter, notificationsPerClient } from './api/notifications';
+
 
 // Essential globals
 const app = express();
-const router = express.Router();
-const rateCheck = require('./middlewares/ratelimiterperclient')
+
 
 //  Initialize global application middlewares
 app.use(cors());
@@ -27,17 +26,13 @@ app.use(
     type: 'application/json'
   })
 );
-
-router.get('/',(req,res) => {
-  res.send('<h1>API response to check the output</h1>')
-})
-
 app.use(jsend.middleware);
-app.use(customRedisRateLimiter);
+
 
 // Initialize API routing
 app.use('/notifications', notificationsRouter);
-app.use('/api/notifications/sametime', router);
+app.use('/api/notifications/sametime',notificationsPerSecRouter);
+app.use('/api/notifications/client',notificationsPerClient);
 
 app.listen(config.APP.PORT, () => {
   logger.info(`Starting Watchtower on  port ${config.APP.PORT}`);
