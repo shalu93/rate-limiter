@@ -15,7 +15,7 @@ module.exports = (req,res,next) => {
         let data = JSON.parse(reply)
         let currentTime = moment().unix()
         let difference = (currentTime - data.startTime)/60
-        console.log('current time:',currentTime, 'data start time', data.startTime);
+        console.log('current time:',currentTime, 'data start time', data.startTime, 'no of requests' , data.count);
         if(difference >= 1) {
           let body = {
             'count': 1,
