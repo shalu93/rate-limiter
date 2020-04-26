@@ -3,7 +3,9 @@ import redis from 'redis';
 
 const redisClient = redis.createClient();
 const WINDOW_SIZE_IN_HOURS = 24;
-const MAX_WINDOW_REQUEST_COUNT = 40;
+const ACTUAL_WINDOW_REQUEST_COUNT = 30;
+const PERCENTAGE_SOFT_THROTTLING = 20/100;
+const MAX_WINDOW_REQUEST_COUNT = ACTUAL_WINDOW_REQUEST_COUNT + (ACTUAL_WINDOW_REQUEST_COUNT * PERCENTAGE_SOFT_THROTTLING );
 const WINDOW_LOG_INTERVAL_IN_HOURS = 1;
 
 
@@ -43,11 +45,12 @@ export const customRedisRateLimiter = (req, res, next) => {
         return accumulator + entry.requestCount;
       }, 0);
       // if number of requests made is greater than or equal to the desired maximum, return error
+      console.log('total window request count',totalWindowRequestsCount, 'max request count', MAX_WINDOW_REQUEST_COUNT )
       if (totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT) {
         res
           .status(429)
           .jsend.error(
-            `You have exceeded the ${MAX_WINDOW_REQUEST_COUNT} requests in ${WINDOW_SIZE_IN_HOURS} hrs limit!, Please try again later`
+            `You have Limit of ${ACTUAL_WINDOW_REQUEST_COUNT} and were allowed the exceeded limit of ${MAX_WINDOW_REQUEST_COUNT} requests in ${WINDOW_SIZE_IN_HOURS} hrs time-period!, Please try again later`
           );
       } else {
         // if number of requests made is less than allowed maximum, log new entry

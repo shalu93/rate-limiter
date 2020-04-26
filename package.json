@@ -7,7 +7,7 @@
   "author": "Shalu Chandwani",
   "license": "ISC",
   "scripts": {
-    "test": "flow check && mocha -r @babel/register tests",
+    "test": " mocha --require @babel/register --timeout 3000 tests/*.js --exit",
     "build": "npm run build:lib",
     "build:lib": "babel src/ -d lib/ --copy-files",
     "build:flow": "flow-copy-source -v src/ lib/",
