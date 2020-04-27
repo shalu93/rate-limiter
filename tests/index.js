@@ -1,21 +1,43 @@
 import { describe, it } from 'mocha';
 import 'chai/register-should';
+import chaiHttp from 'chai-http';
+import chai from 'chai';
+import server from '../src/index';
 
-describe('my-test', () => {
-  it('should succeed', () => {
-    function fib(n) {
-      switch (n) {
-        case 0:
-          return 0;
+let expect = chai.expect;
+chai.use(chaiHttp);
 
-        case 1:
-          return 1;
-
-        default:
-          return fib(n - 1) + fib(n - 2);
-      }
-    }
-
-    fib(10).should.equal(55);
+describe('Testing the API Requests per second', () => {
+  it('Firing the first request', (done) => {
+    chai.request(server)
+        .get('/api/notifications/sametime')
+        .set('user','Andela')
+        .end((err, res) => {
+            expect(res).to.have.status(200);
+            done();
+        });
   });
+});
+
+describe('Testing too many request across system', () => {
+  it('Firing the first request', (done) => {
+    chai.request(server)
+        .get('/notifications')
+        .end((err, res) => {
+            expect(res).to.have.status(200);
+            done();
+        });
+});
+});
+
+describe('Testing specific client request per month', () => {
+  it('Firing the first request', (done) => {
+    chai.request(server)
+        .get('/api/notifications/client')
+        .set('user','Andela')
+        .end((err, res) => {
+            expect(res).to.have.status(200);
+            done();
+        });
+});
 });

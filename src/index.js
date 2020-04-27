@@ -34,7 +34,7 @@ app.use('/notifications', notificationsRouter);
 app.use('/api/notifications/sametime',notificationsPerSecRouter);
 app.use('/api/notifications/client',notificationsPerClient);
 
-app.listen(config.APP.PORT, () => {
+const server = app.listen(config.APP.PORT, () => {
   logger.info(`Starting Watchtower on  port ${config.APP.PORT}`);
 });
 
@@ -53,3 +53,5 @@ process.on('SIGINT', () => {
   logger.info(' Alright! Bye bye!');
   process.exit();
 });
+
+module.exports = server;
